@@ -42,14 +42,19 @@ const App: React.FC = () => {
     }
   };
 
-  const LOGO_URL = "https://storage.googleapis.com/msgsndr/0wU8TEPnQYaDjxaaOoxk/media/6925d10ac57318d59bd4b2d0.png";
+  const LOGO_ICON_URL = "https://storage.googleapis.com/msgsndr/0wU8TEPnQYaDjxaaOoxk/media/6925d10ac57318d59bd4b2d0.png";
 
   return (
     <div className="flex min-h-screen bg-zinc-950 text-zinc-100 overflow-hidden font-['Inter']">
       {/* Sidebar */}
       <aside className="w-72 bg-zinc-900/50 border-r border-zinc-800 flex flex-col hidden md:flex">
         <div className="p-8 flex flex-col items-center">
-          <img src={LOGO_URL} alt="GHL TEAM LATAM" className="w-48 h-auto mb-6" />
+          <div className="flex flex-col items-center gap-3 mb-6">
+            <img src={LOGO_ICON_URL} alt="GHL Icon" className="w-12 h-12 object-contain" />
+            <h1 className="text-white text-lg font-black tracking-tighter text-center leading-none">
+              GHL TEAM<br/><span className="text-lime-500">LATAM</span>
+            </h1>
+          </div>
           <div className="w-full h-px bg-zinc-800 mb-6"></div>
           <div className="flex items-center gap-2 bg-lime-500/10 px-3 py-1.5 rounded-md border border-lime-500/20 w-full justify-center">
             <Dumbbell className="text-lime-500" size={16} />

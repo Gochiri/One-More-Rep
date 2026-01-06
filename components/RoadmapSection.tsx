@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CheckCircle2, Clock, Package, GraduationCap, BrainCircuit, Activity, Settings } from 'lucide-react';
+import { CheckCircle2, Clock, Package, GraduationCap, BrainCircuit, Activity, Settings, Zap } from 'lucide-react';
 
 const RoadmapSection: React.FC = () => {
   const [selectedPhase, setSelectedPhase] = useState(0);
@@ -29,10 +29,17 @@ const RoadmapSection: React.FC = () => {
     },
     {
       id: 3,
-      title: "Semanas 8-10: Piloto",
+      title: "Semanas 8-10: Piloto MVP",
       time: "75-82h",
       icon: <Activity size={20} />,
-      items: ["Implementación en Cliente Piloto", "Ajustes de Snapshot", "Lanzamiento Oficial"]
+      items: ["Implementación en Cliente Piloto", "Ajustes de Snapshot", "Lanzamiento Oficial MVP"]
+    },
+    {
+      id: 4,
+      title: "+ Semanas 11-12: Bolsa de Leads",
+      time: "40-60h",
+      icon: <Zap size={20} />,
+      items: ["Arquitectura de Distribución de Leads", "Integración de Fuentes Externas", "Workflow de Venta de Leads Automatizada"]
     }
   ];
 
@@ -40,7 +47,7 @@ const RoadmapSection: React.FC = () => {
     <div className="space-y-12">
       <div className="text-left space-y-4">
         <h2 className="text-5xl font-extrabold tracking-tighter uppercase italic">Cronograma de Entrega</h2>
-        <p className="text-zinc-400 text-lg">8-10 semanas de ingeniería intensiva (aprox. 300 horas totales)</p>
+        <p className="text-zinc-400 text-lg">MVP en 8-10 semanas. Bolsa de Leads añade 2-3 semanas adicionales.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -61,8 +68,8 @@ const RoadmapSection: React.FC = () => {
                   {phase.icon}
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold uppercase tracking-tight italic">{phase.title}</h4>
-                  <p className={`text-[10px] font-bold ${selectedPhase === phase.id ? 'text-black/60' : 'text-zinc-600'}`}>FASE COMPLETADA AL 0%</p>
+                  <h4 className="text-sm font-bold uppercase tracking-tight italic leading-tight">{phase.title}</h4>
+                  <p className={`text-[10px] font-bold ${selectedPhase === phase.id ? 'text-black/60' : 'text-zinc-600'}`}>ESTADO: PENDIENTE</p>
                 </div>
               </div>
             </button>

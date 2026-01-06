@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS GYM - Propuesta Comercial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #09090b; 
+            color: #fafafa; 
+            margin: 0; 
+            width: 100%; 
+            overflow-x: hidden; 
+        }
+        
+        /* Layout */
+        .glass-sidebar { background: #09090b; border-right: 1px solid #18181b; }
+        .main-content { background: radial-gradient(circle at top right, #18181b, #09090b); }
+        
+        /* Typography */
+        .italic-bold { font-style: italic; font-weight: 800; letter-spacing: -0.05em; }
+        
+        /* Navigation */
+        .nav-btn { position: relative; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-btn.active { 
+            background-color: #84cc16; 
+            color: #000; 
+            font-weight: 700;
+            box-shadow: 0 10px 20px -5px rgba(132, 204, 22, 0.3);
+        }
+        .nav-btn.active i { color: #000 !important; }
+        
+        /* Sections */
+        .section-content { display: none; width: 100%; height: 100%; }
+        .section-content.active { display: block; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+        
+        /* Cards */
+        .card-base { 
+            background: rgba(24, 24, 27, 0.5); 
+            border: 1px solid #18181b; 
+            border-radius: 1.5rem; 
+            transition: border-color 0.3s;
+        }
+        .card-base:hover { border-color: rgba(132, 204, 22, 0.3); }
+
+        /* Roadmap Phases */
+        .phase-btn.active { background-color: #84cc16; border-color: #84cc16; color: #000; }
+        .phase-btn.active .phase-title { color: #000; }
+        .phase-btn.active .phase-status { color: rgba(0,0,0,0.5); }
+        
+        .phase-detail { display: none; }
+        .phase-detail.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+        /* Mobile Menu */
+        #mobile-menu { 
+            position: fixed; top: 0; left: 0; bottom: 0; z-index: 1000; 
+            width: 280px; transform: translateX(-100%); transition: transform 0.3s;
+        }
+        #mobile-menu.open { transform: translateX(0); }
+        #menu-overlay { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); 
+            z-index: 999; display: none; 
+        }
+        #menu-overlay.open { display: block; }
+
+        @media (max-width: 1024px) {
+            .desktop-sidebar { display: none; }
+            .main-view { margin-left: 0 !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="menu-overlay" onclick="toggleMenu()"></div>
+
+    <!-- MOBILE MENU -->
+    <aside id="mobile-menu" class="glass-sidebar flex flex-col p-6">
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-3">
+                <div class="flex gap-1">
+                    <div class="w-1.5 h-6 bg-orange-500 rounded-full"></div>
+                    <div class="w-1.5 h-6 bg-lime-500 rounded-full"></div>
+                    <div class="w-1.5 h-6 bg-cyan-500 rounded-full"></div>
+                </div>
+                <span class="italic-bold text-sm tracking-tighter">GHL TEAM<br><span class="text-lime-500">LATAM</span></span>
+            </div>
+            <button onclick="toggleMenu()" class="text-zinc-500"><i data-lucide="x"></i></button>
+        </div>
+        <nav id="mobile-nav" class="flex-1 space-y-2">
+            <!-- Items cloned by JS -->
+        </nav>
+    </aside>
+
+    <div class="flex h-screen w-full">
+        <!-- DESKTOP SIDEBAR -->
+        <aside class="desktop-sidebar w-72 glass-sidebar flex flex-col shrink-0">
+            <div class="p-8 flex flex-col items-center">
+                <div class="flex flex-col items-center gap-4 mb-8">
+                    <div class="flex gap-1.5">
+                        <div class="w-2 h-8 bg-orange-500 rounded-full"></div>
+                        <div class="w-2 h-8 bg-lime-500 rounded-full"></div>
+                        <div class="w-2 h-8 bg-cyan-500 rounded-full"></div>
+                    </div>
+                    <h1 class="italic-bold text-xl text-center leading-none">
+                        GHL TEAM<br><span class="text-lime-500 uppercase">Latam</span>
+                    </h1>
+                </div>
+                <div class="w-full h-px bg-zinc-800/50 mb-6"></div>
+                <div class="flex items-center gap-2 bg-zinc-800/30 px-4 py-2 rounded-lg border border-zinc-700/30 w-full justify-center">
+                    <i data-lucide="dumbbell" class="text-lime-500 w-4 h-4"></i>
+                    <span class="text-[10px] font-black text-lime-500 uppercase tracking-widest italic">SaaS GYM AI</span>
+                </div>
+            </div>
+
+            <nav id="desktop-nav" class="flex-1 px-4 space-y-2">
+                <button onclick="showSection('vision', this)" class="nav-btn active w-full flex items-center justify-between px-5 py-3 rounded-xl text-zinc-400 group">
+                    <div class="flex items-center gap-3"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> <span class="text-sm font-bold">Resumen Ejecutivo</span></div>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+                <button onclick="showSection('tecnico', this)" class="nav-btn w-full flex items-center justify-between px-5 py-3 rounded-xl text-zinc-400 group">
+                    <div class="flex items-center gap-3"><i data-lucide="settings" class="w-5 h-5"></i> <span class="text-sm font-bold">Desglose Técnico</span></div>
+                </button>
+                <button onclick="showSection('onboarding', this)" class="nav-btn w-full flex items-center justify-between px-5 py-3 rounded-xl text-zinc-400 group">
+                    <div class="flex items-center gap-3"><i data-lucide="play-circle" class="w-5 h-5"></i> <span class="text-sm font-bold">Videos y Soporte</span></div>
+                </button>
+                <button onclick="showSection('roadmap', this)" class="nav-btn w-full flex items-center justify-between px-5 py-3 rounded-xl text-zinc-400 group">
+                    <div class="flex items-center gap-3"><i data-lucide="map" class="w-5 h-5"></i> <span class="text-sm font-bold">Cronograma</span></div>
+                </button>
+                <button onclick="showSection('inversion', this)" class="nav-btn w-full flex items-center justify-between px-5 py-3 rounded-xl text-zinc-400 group">
+                    <div class="flex items-center gap-3"><i data-lucide="credit-card" class="w-5 h-5"></i> <span class="text-sm font-bold">Inversión y ROI</span></div>
+                </button>
+            </nav>
+
+            <div class="p-8 border-t border-zinc-800/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700">
+                        <i data-lucide="users" class="text-lime-500 w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-black text-zinc-500 uppercase tracking-wider">Preparado para:</p>
+                        <p class="text-xs font-bold text-white tracking-tight">ONE MORE REP Training</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 overflow-y-auto custom-scrollbar main-content relative">
+            
+            <!-- HEADER -->
+            <header class="sticky top-0 z-50 bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-800/50 px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-black tracking-[0.2em] text-zinc-500 uppercase">Propuesta Comercial</span>
+                    <span class="text-zinc-700">/</span>
+                    <span id="header-subtitle" class="text-[10px] font-black tracking-[0.2em] text-lime-500 uppercase italic">Resumen Ejecutivo</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <button onclick="toggleMenu()" class="lg:hidden p-2 bg-zinc-800 rounded-lg"><i data-lucide="menu" class="w-5 h-5"></i></button>
+                    <div class="hidden md:flex items-center gap-4">
+                        <span class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">V 1.0</span>
+                        <div class="w-px h-4 bg-zinc-800"></div>
+                        <span class="text-[10px] font-black text-zinc-500 uppercase tracking-widest italic">6 de Enero 2026</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="max-w-6xl mx-auto p-4 md:p-12 pb-40">
+                
+                <!-- VISION -->
+                <div id="vision" class="section-content active">
+                    <div class="flex flex-col items-center text-center space-y-6 mb-20">
+                        <div class="w-20 h-20 bg-lime-500/10 rounded-3xl flex items-center justify-center border border-lime-500/20 shadow-[0_0_50px_rgba(132,204,22,0.1)]">
+                            <i data-lucide="zap" class="text-lime-500 w-10 h-10"></i>
+                        </div>
+                        <h2 class="italic-bold text-4xl md:text-6xl tracking-tighter uppercase">
+                            SAAS <span class="text-lime-500">GYM</span> AUTOMATION
+                        </h2>
+                        <p class="text-zinc-400 text-lg md:text-xl font-light max-w-2xl leading-relaxed">
+                            Sistema de IA para Entrenadores Personales. <span class="text-white font-bold italic">2.5x más clientes, 75% menos tiempo de gestión.</span>
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                        <div class="card-base p-10 space-y-4">
+                            <div class="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center"><i data-lucide="message-square" class="text-lime-500"></i></div>
+                            <h3 class="italic-bold text-xl uppercase">Captación 24/7</h3>
+                            <p class="text-zinc-500 text-sm leading-relaxed">Contacta automáticamente nuevos seguidores de Instagram en < 2 minutos.</p>
+                        </div>
+                        <div class="card-base p-10 space-y-4">
+                            <div class="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center"><i data-lucide="clock" class="text-lime-500"></i></div>
+                            <h3 class="italic-bold text-xl uppercase">Cero Olvidos</h3>
+                            <p class="text-zinc-500 text-sm leading-relaxed">Alertas automáticas de vencimiento a los 15 y 7 días. Seguimientos perfectos.</p>
+                        </div>
+                        <div class="card-base p-10 space-y-4">
+                            <div class="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center"><i data-lucide="trending-up" class="text-lime-500"></i></div>
+                            <h3 class="italic-bold text-xl uppercase">Escalabilidad</h3>
+                            <p class="text-zinc-500 text-sm leading-relaxed">Capacidad para gestionar 100+ clientes simultáneos sin equipo humano adicional.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-base p-12 flex flex-col md:flex-row items-center gap-12">
+                        <div class="flex-1 space-y-4">
+                            <h4 class="italic-bold text-2xl uppercase tracking-tighter">¿POR QUÉ ONE MORE REP NECESITA ESTO?</h4>
+                            <p class="text-zinc-400 leading-relaxed">Sin el sistema, el tiempo de respuesta es de 4-6h y se pierde el 60% de los seguimientos. Con esta arquitectura, la retención sube al 90% y la conversión al 30%.</p>
+                        </div>
+                        <div class="flex gap-4 shrink-0">
+                            <div class="bg-zinc-800/50 p-6 rounded-2xl border border-zinc-700/50 text-center min-w-[140px]">
+                                <p class="italic-bold text-3xl text-lime-500 tracking-tighter">2.2m</p>
+                                <p class="text-[9px] font-black text-zinc-500 uppercase tracking-widest mt-1">Recuperación ROI</p>
+                            </div>
+                            <div class="bg-zinc-800/50 p-6 rounded-2xl border border-zinc-700/50 text-center min-w-[140px]">
+                                <p class="italic-bold text-3xl text-lime-500 tracking-tighter">€5.8k</p>
+                                <p class="text-[9px] font-black text-zinc-500 uppercase tracking-widest mt-1">MRR Proyectado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TECNICO -->
+                <div id="tecnico" class="section-content">
+                    <h2 class="italic-bold text-4xl md:text-5xl uppercase text-center mb-4 tracking-tighter">DESGLOSE TÉCNICO</h2>
+                    <p class="text-zinc-500 text-center text-lg mb-16">Infraestructura GoHighLevel + Inteligencia Artificial</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <div class="card-base p-10 relative overflow-hidden group">
+                            <i data-lucide="database" class="absolute -right-8 -top-8 w-40 h-40 opacity-5 text-lime-500"></i>
+                            <div class="flex items-center gap-4 mb-10">
+                                <i data-lucide="layout" class="text-lime-500 w-8 h-8"></i>
+                                <h3 class="italic-bold text-2xl uppercase">Arquitectura GHL</h3>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="bg-zinc-950/60 p-4 rounded-xl flex justify-between items-center border border-zinc-800/50">
+                                    <span class="text-zinc-400 text-sm font-bold uppercase tracking-tight">Custom Fields</span>
+                                    <span class="italic-bold text-lime-500 text-lg">40</span>
+                                </div>
+                                <div class="bg-zinc-950/60 p-4 rounded-xl flex justify-between items-center border border-zinc-800/50">
+                                    <span class="text-zinc-400 text-sm font-bold uppercase tracking-tight">Tags Organizados</span>
+                                    <span class="italic-bold text-lime-500 text-lg">40</span>
+                                </div>
+                                <div class="bg-zinc-950/60 p-4 rounded-xl flex justify-between items-center border border-zinc-800/50">
+                                    <span class="text-zinc-400 text-sm font-bold uppercase tracking-tight">Workflows Automatizados</span>
+                                    <span class="italic-bold text-lime-500 text-lg">14</span>
+                                </div>
+                                <div class="bg-zinc-950/60 p-4 rounded-xl flex justify-between items-center border border-zinc-800/50">
+                                    <span class="text-zinc-400 text-sm font-bold uppercase tracking-tight">Plantillas de Mensajes</span>
+                                    <span class="italic-bold text-lime-500 text-lg">20+</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-base p-10 relative overflow-hidden group">
+                            <i data-lucide="cpu" class="absolute -right-8 -top-8 w-40 h-40 opacity-5 text-purple-500"></i>
+                            <div class="flex items-center gap-4 mb-10">
+                                <i data-lucide="message-square" class="text-purple-500 w-8 h-8"></i>
+                                <h3 class="italic-bold text-2xl uppercase">Agentes IA</h3>
+                            </div>
+                            <div class="space-y-6">
+                                <div class="bg-zinc-950/60 p-5 rounded-2xl border border-zinc-800/50">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-[9px] font-black text-white uppercase tracking-[0.2em] italic">Agente Outbound (Bienvenida)</span>
+                                        <span class="text-[8px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded border border-purple-500/30 uppercase font-black">Instagram</span>
+                                    </div>
+                                    <p class="text-zinc-500 text-xs italic leading-relaxed">Contacta seguidores, califica leads (scoring 1-100) y responde en < 2 min de forma natural.</p>
+                                </div>
+                                <div class="bg-zinc-950/60 p-5 rounded-2xl border border-zinc-800/50">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-[9px] font-black text-white uppercase tracking-[0.2em] italic">Agente Inbound (Consultas)</span>
+                                        <span class="text-[8px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded border border-purple-500/30 uppercase font-black">WhatsApp/DM</span>
+                                    </div>
+                                    <p class="text-zinc-500 text-xs italic leading-relaxed">Responde 24/7, maneja objeciones técnicas/precios y agenda llamadas automáticamente.</p>
+                                </div>
+                                <div class="text-[10px] font-black text-zinc-600 uppercase tracking-widest pt-2">Costo operativo IA: < $20/mes por cliente</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="card-base p-8 space-y-6">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="list-todo" class="text-lime-500 w-6 h-6"></i>
+                                <h4 class="italic-bold text-sm uppercase">2 Pipelines (14 Etapas)</h4>
+                            </div>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-3 text-zinc-500 text-sm"><div class="w-1 h-1 bg-lime-500 rounded-full"></div> Setter - Conversión (7 etapas)</li>
+                                <li class="flex items-center gap-3 text-zinc-500 text-sm"><div class="w-1 h-1 bg-lime-500 rounded-full"></div> Gestión Activos (7 etapas)</li>
+                            </ul>
+                        </div>
+                        <div class="card-base p-8 space-y-6">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="users" class="text-lime-500 w-6 h-6"></i>
+                                <h4 class="italic-bold text-sm uppercase">Onboarding Inteligente</h4>
+                            </div>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-3 text-zinc-500 text-sm"><div class="w-1 h-1 bg-lime-500 rounded-full"></div> Cuestionario Inicial (30 campos)</li>
+                                <li class="flex items-center gap-3 text-zinc-500 text-sm"><div class="w-1 h-1 bg-lime-500 rounded-full"></div> Calendarios Zoom/Meet</li>
+                                <li class="flex items-center gap-3 text-zinc-500 text-sm"><div class="w-1 h-1 bg-lime-500 rounded-full"></div> Formularios Calificación</li>
+                            </ul>
+                        </div>
+                        <div class="card-base p-8 space-y-6">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="repeat" class="text-lime-500 w-6 h-6"></i>
+                                <h4 class="italic-bold text-sm uppercase">Retención Proactiva</h4>
+                            </div>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-3 text-zinc-500 text-sm"><div class="w-1 h-1 bg-lime-500 rounded-full"></div> Check-in cada 14 días</li>
+                                <li class="flex items-center gap-3 text-zinc-500 text-sm"><div class="w-1 h-1 bg-lime-500 rounded-full"></div> Alertas vencimiento 15/7d</li>
+                                <li class="flex items-center gap-3 text-zinc-500 text-sm"><div class="w-1 h-1 bg-lime-500 rounded-full"></div> Secuencia Reactivación Post-Venc.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ONBOARDING -->
+                <div id="onboarding" class="section-content">
+                    <h2 class="italic-bold text-4xl md:text-5xl uppercase text-center mb-4 tracking-tighter">SOPORTE & ONBOARDING</h2>
+                    <p class="text-zinc-500 text-center text-lg mb-16">30 Videos tutoriales (134 min total) para autonomía total del cliente</p>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                        <div class="card-base p-6 flex flex-col justify-between h-44 group">
+                            <i data-lucide="play-circle" class="text-zinc-600 group-hover:text-lime-500 w-8 h-8 transition-colors"></i>
+                            <div>
+                                <h4 class="italic-bold text-xs uppercase mb-3">Primeros Pasos</h4>
+                                <div class="flex justify-between items-center border-t border-zinc-800 pt-3 text-[10px] font-black uppercase tracking-widest">
+                                    <span class="text-zinc-500">5 Videos</span> <span class="text-lime-500">22 min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-base p-6 flex flex-col justify-between h-44 group">
+                            <i data-lucide="message-circle" class="text-zinc-600 group-hover:text-lime-500 w-8 h-8 transition-colors"></i>
+                            <div>
+                                <h4 class="italic-bold text-xs uppercase mb-3">Gestión Conversaciones</h4>
+                                <div class="flex justify-between items-center border-t border-zinc-800 pt-3 text-[10px] font-black uppercase tracking-widest">
+                                    <span class="text-zinc-500">4 Videos</span> <span class="text-lime-500">15 min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-base p-6 flex flex-col justify-between h-44 group">
+                            <i data-lucide="video" class="text-zinc-600 group-hover:text-lime-500 w-8 h-8 transition-colors"></i>
+                            <div>
+                                <h4 class="italic-bold text-xs uppercase mb-3">Pipeline Oportunidades</h4>
+                                <div class="flex justify-between items-center border-t border-zinc-800 pt-3 text-[10px] font-black uppercase tracking-widest">
+                                    <span class="text-zinc-500">4 Videos</span> <span class="text-lime-500">18 min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-base p-6 flex flex-col justify-between h-44 group">
+                            <i data-lucide="check-circle" class="text-zinc-600 group-hover:text-lime-500 w-8 h-8 transition-colors"></i>
+                            <div>
+                                <h4 class="italic-bold text-xs uppercase mb-3">Gestión de Clientes</h4>
+                                <div class="flex justify-between items-center border-t border-zinc-800 pt-3 text-[10px] font-black uppercase tracking-widest">
+                                    <span class="text-zinc-500">4 Videos</span> <span class="text-lime-500">16 min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-base p-6 flex flex-col justify-between h-44 group">
+                            <i data-lucide="play-circle" class="text-zinc-600 group-hover:text-lime-500 w-8 h-8 transition-colors"></i>
+                            <div>
+                                <h4 class="italic-bold text-xs uppercase mb-3">Calendarios</h4>
+                                <div class="flex justify-between items-center border-t border-zinc-800 pt-3 text-[10px] font-black uppercase tracking-widest">
+                                    <span class="text-zinc-500">3 Videos</span> <span class="text-lime-500">14 min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-base p-6 flex flex-col justify-between h-44 group">
+                            <i data-lucide="message-circle" class="text-zinc-600 group-hover:text-lime-500 w-8 h-8 transition-colors"></i>
+                            <div>
+                                <h4 class="italic-bold text-xs uppercase mb-3">Personalización</h4>
+                                <div class="flex justify-between items-center border-t border-zinc-800 pt-3 text-[10px] font-black uppercase tracking-widest">
+                                    <span class="text-zinc-500">3 Videos</span> <span class="text-lime-500">16 min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-base p-6 flex flex-col justify-between h-44 group">
+                            <i data-lucide="video" class="text-zinc-600 group-hover:text-lime-500 w-8 h-8 transition-colors"></i>
+                            <div>
+                                <h4 class="italic-bold text-xs uppercase mb-3">Funciones Avanzadas</h4>
+                                <div class="flex justify-between items-center border-t border-zinc-800 pt-3 text-[10px] font-black uppercase tracking-widest">
+                                    <span class="text-zinc-500">3 Videos</span> <span class="text-lime-500">19 min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-base p-6 flex flex-col justify-between h-44 group">
+                            <i data-lucide="info" class="text-zinc-600 group-hover:text-lime-500 w-8 h-8 transition-colors"></i>
+                            <div>
+                                <h4 class="italic-bold text-xs uppercase mb-3">Troubleshooting</h4>
+                                <div class="flex justify-between items-center border-t border-zinc-800 pt-3 text-[10px] font-black uppercase tracking-widest">
+                                    <span class="text-zinc-500">4 Videos</span> <span class="text-lime-500">14 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="card-base p-10 space-y-10">
+                            <h3 class="italic-bold text-2xl uppercase tracking-tighter">Métricas de Éxito</h3>
+                            <div class="space-y-8">
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-[10px] font-black text-zinc-500 uppercase tracking-widest"><span>Engagement con Videos</span><span>80%</span></div>
+                                    <div class="w-full h-1.5 bg-zinc-800 rounded-full"><div class="h-full bg-lime-500 rounded-full" style="width: 80%"></div></div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-[10px] font-black text-zinc-500 uppercase tracking-widest"><span>Setup Completado (3 días)</span><span>85%</span></div>
+                                    <div class="w-full h-1.5 bg-zinc-800 rounded-full"><div class="h-full bg-lime-500 rounded-full" style="width: 85%"></div></div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-[10px] font-black text-zinc-500 uppercase tracking-widest"><span>Reducción Soporte Humano</span><span>65%</span></div>
+                                    <div class="w-full h-1.5 bg-zinc-800 rounded-full"><div class="h-full bg-lime-500 rounded-full" style="width: 65%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-base p-10 flex flex-col justify-center relative overflow-hidden group">
+                            <i data-lucide="info" class="absolute -right-8 -top-8 w-40 h-40 opacity-5 text-zinc-500"></i>
+                            <h3 class="italic-bold text-2xl uppercase tracking-tighter mb-6">Base de Conocimiento</h3>
+                            <p class="text-zinc-500 text-sm leading-relaxed mb-10 italic">Cada cliente de ONE MORE REP tendrá acceso a 30 FAQs categorizadas con buscador en tiempo real directamente dentro de su sub-cuenta de GoHighLevel.</p>
+                            <div class="space-y-4">
+                                <div class="bg-zinc-950 p-4 rounded-xl flex items-center gap-4 border border-zinc-800/50">
+                                    <i data-lucide="check-circle" class="text-lime-500 w-5 h-5"></i>
+                                    <span class="text-zinc-400 text-xs font-bold uppercase italic">Actualización dinámica de contenidos.</span>
+                                </div>
+                                <div class="bg-zinc-950 p-4 rounded-xl flex items-center gap-4 border border-zinc-800/50">
+                                    <i data-lucide="check-circle" class="text-lime-500 w-5 h-5"></i>
+                                    <span class="text-zinc-400 text-xs font-bold uppercase italic">Buscador por palabras clave.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROADMAP -->
+                <div id="roadmap" class="section-content">
+                    <h2 class="italic-bold text-4xl md:text-5xl uppercase mb-4 tracking-tighter">CRONOGRAMA DE ENTREGA</h2>
+                    <p class="text-zinc-500 text-lg mb-16 italic">MVP en 8-10 semanas. Bolsa de Leads añade 2-3 semanas adicionales.</p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                        <div class="lg:col-span-5 space-y-3">
+                            <button onclick="showPhase(0, this)" class="phase-btn active w-full text-left p-6 rounded-2xl border border-zinc-800 bg-zinc-900/40 flex items-center justify-between group transition-all">
+                                <div class="flex items-center gap-4">
+                                    <div class="p-3 bg-zinc-800 rounded-lg group-hover:bg-lime-500/10"><i data-lucide="settings" class="w-6 h-6 text-zinc-500 group-hover:text-lime-500"></i></div>
+                                    <div>
+                                        <h4 class="phase-title italic-bold text-sm uppercase tracking-tight">Semanas 1-2: Setup</h4>
+                                        <p class="phase-status text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-1">Estado: Pendiente</p>
+                                    </div>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-5 h-5 opacity-20 group-hover:opacity-100"></i>
+                            </button>
+                            <button onclick="showPhase(1, this)" class="phase-btn w-full text-left p-6 rounded-2xl border border-zinc-800 bg-zinc-900/40 flex items-center justify-between group transition-all">
+                                <div class="flex items-center gap-4">
+                                    <div class="p-3 bg-zinc-800 rounded-lg group-hover:bg-lime-500/10"><i data-lucide="brain-circuit" class="w-6 h-6 text-zinc-500 group-hover:text-lime-500"></i></div>
+                                    <div>
+                                        <h4 class="phase-title italic-bold text-sm uppercase tracking-tight">Semanas 3-5: IA Core</h4>
+                                        <p class="phase-status text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-1">Estado: Pendiente</p>
+                                    </div>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-5 h-5 opacity-20 group-hover:opacity-100"></i>
+                            </button>
+                            <button onclick="showPhase(2, this)" class="phase-btn w-full text-left p-6 rounded-2xl border border-zinc-800 bg-zinc-900/40 flex items-center justify-between group transition-all">
+                                <div class="flex items-center gap-4">
+                                    <div class="p-3 bg-zinc-800 rounded-lg group-hover:bg-lime-500/10"><i data-lucide="package" class="w-6 h-6 text-zinc-500 group-hover:text-lime-500"></i></div>
+                                    <div>
+                                        <h4 class="phase-title italic-bold text-sm uppercase tracking-tight">Semanas 6-7: Onboarding</h4>
+                                        <p class="phase-status text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-1">Estado: Pendiente</p>
+                                    </div>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-5 h-5 opacity-20 group-hover:opacity-100"></i>
+                            </button>
+                            <button onclick="showPhase(3, this)" class="phase-btn w-full text-left p-6 rounded-2xl border border-zinc-800 bg-zinc-900/40 flex items-center justify-between group transition-all">
+                                <div class="flex items-center gap-4">
+                                    <div class="p-3 bg-zinc-800 rounded-lg group-hover:bg-lime-500/10"><i data-lucide="activity" class="w-6 h-6 text-zinc-500 group-hover:text-lime-500"></i></div>
+                                    <div>
+                                        <h4 class="phase-title italic-bold text-sm uppercase tracking-tight">Semanas 8-10: Piloto MVP</h4>
+                                        <p class="phase-status text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-1">Estado: Pendiente</p>
+                                    </div>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-5 h-5 opacity-20 group-hover:opacity-100"></i>
+                            </button>
+                            <button onclick="showPhase(4, this)" class="phase-btn w-full text-left p-6 rounded-2xl border border-zinc-800 bg-zinc-900/40 flex items-center justify-between group transition-all">
+                                <div class="flex items-center gap-4">
+                                    <div class="p-3 bg-zinc-800 rounded-lg group-hover:bg-lime-500/10"><i data-lucide="zap" class="w-6 h-6 text-zinc-500 group-hover:text-lime-500"></i></div>
+                                    <div>
+                                        <h4 class="phase-title italic-bold text-sm uppercase tracking-tight">+ Semanas 11-12: Leads</h4>
+                                        <p class="phase-status text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-1">Estado: Pendiente</p>
+                                    </div>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-5 h-5 opacity-20 group-hover:opacity-100"></i>
+                            </button>
+                        </div>
+
+                        <div id="phase-details-container" class="lg:col-span-7 bg-zinc-900/60 p-12 rounded-[2.5rem] border border-zinc-800 relative overflow-hidden flex flex-col justify-center min-h-[450px]">
+                            <i data-lucide="clock" class="absolute -right-10 -top-10 w-64 h-64 opacity-5 text-zinc-500"></i>
+                            <div id="phase-initial" class="phase-detail active space-y-8">
+                                <div class="flex items-center gap-3 text-lime-500">
+                                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+                                    <span class="text-[10px] font-black uppercase tracking-[0.3em]">Entregables de la fase</span>
+                                </div>
+                                <h3 class="italic-bold text-5xl uppercase tracking-tighter">SEMANAS 1-2: SETUP</h3>
+                                <div class="space-y-4">
+                                    <div class="bg-zinc-950/80 p-5 rounded-2xl border border-zinc-800/50 flex items-center gap-6">
+                                        <div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center italic-bold text-lime-500 text-xs border border-zinc-700">1</div>
+                                        <span class="text-sm font-bold uppercase italic text-zinc-300">Configuración GHL Agencia</span>
+                                    </div>
+                                    <div class="bg-zinc-950/80 p-5 rounded-2xl border border-zinc-800/50 flex items-center gap-6">
+                                        <div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center italic-bold text-lime-500 text-xs border border-zinc-700">2</div>
+                                        <span class="text-sm font-bold uppercase italic text-zinc-300">Custom Fields y Etiquetas GYM</span>
+                                    </div>
+                                    <div class="bg-zinc-950/80 p-5 rounded-2xl border border-zinc-800/50 flex items-center gap-6">
+                                        <div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center italic-bold text-lime-500 text-xs border border-zinc-700">3</div>
+                                        <span class="text-sm font-bold uppercase italic text-zinc-300">Pipelines de Ventas y Gestión</span>
+                                    </div>
+                                </div>
+                                <div class="pt-8 border-t border-zinc-800 flex justify-between items-center">
+                                    <span class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Esfuerzo Estimado</span>
+                                    <span class="bg-lime-500/10 text-lime-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase border border-lime-500/20">25-35h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INVERSION -->
+                <div id="inversion" class="section-content">
+                    <div class="flex flex-col lg:flex-row justify-between items-start md:items-end mb-8 md:mb-16 gap-6 md:gap-8">
+                        <div class="space-y-2 md:space-y-4">
+                            <h2 class="italic-bold text-2xl md:text-3xl lg:text-4xl uppercase tracking-tighter">PROPUESTA DE INVERSIÓN</h2>
+                            <p class="text-zinc-500 text-base md:text-lg font-light italic tracking-tight">ONE MORE REP Training - Plan de Escalabilidad</p>
+                        </div>
+                        <div class="bg-zinc-900 p-1 rounded-full border border-zinc-800 flex items-center gap-1 w-full md:w-auto">
+                            <button id="btn-mvp" onclick="updatePrice(false)" class="flex-1 md:flex-none px-4 py-2 rounded-full text-[8px] md:text-[9px] font-black uppercase bg-lime-500 text-black shadow-lg transition-all">MVP BÁSICO</button>
+                            <button id="btn-full" onclick="updatePrice(true)" class="flex-1 md:flex-none px-4 py-2 rounded-full text-[8px] md:text-[9px] font-black uppercase text-zinc-500 hover:text-white transition-all">PROYECTO COMPLETO</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+                        <div class="lg:col-span-2 card-base p-6 md:p-10 relative overflow-hidden group">
+                            <div class="absolute -right-20 -top-20 w-80 h-80 bg-lime-500/5 rounded-full blur-[100px] group-hover:bg-lime-500/10 transition-all"></div>
+                            
+                            <div class="relative space-y-10 md:space-y-12">
+                                <div class="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-8">
+                                    <div class="space-y-2">
+                                        <span class="text-[8px] md:text-[9px] font-black text-lime-500 uppercase tracking-[0.3em] italic">Inversión Llave en Mano</span>
+                                        <h3 id="price-main" class="italic-bold text-2xl md:text-3xl lg:text-4xl tracking-tighter leading-none">€12.500</h3>
+                                        <div class="space-y-2 mt-4">
+                                            <p class="text-zinc-500 italic text-[10px] md:text-xs">Validación de concepto + Ejecución técnica</p>
+                                            <div class="flex items-center gap-2 text-lime-500 text-[8px] md:text-[9px] font-black uppercase tracking-widest italic">
+                                                <i data-lucide="clock" class="w-3 h-3"></i> Tiempo: <span id="price-time" class="text-white">8-10 SEMANAS</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-zinc-950 p-4 md:p-6 rounded-2xl border border-zinc-800 text-center shadow-2xl min-w-full md:min-w-[110px]">
+                                        <p class="italic-bold text-lg md:text-xl text-lime-500 tracking-tighter leading-none">2.2 Meses</p>
+                                        <p class="text-[7px] md:text-[8px] font-black text-zinc-600 uppercase tracking-widest mt-1 italic">Payback</p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                                    <div class="space-y-4">
+                                        <h5 class="text-[8px] md:text-[9px] font-black uppercase text-zinc-500 border-b border-zinc-800 pb-2 italic tracking-widest">Entregables Clave</h5>
+                                        <ul id="deliverables-list" class="space-y-2 md:space-y-3">
+                                            <li class="flex items-center gap-2 text-zinc-300 font-bold uppercase italic text-[9px] md:text-[10px]"><i data-lucide="check-circle" class="text-lime-500 w-3 h-3"></i> GHL Snapshot (14 etapas)</li>
+                                            <li class="flex items-center gap-2 text-zinc-300 font-bold uppercase italic text-[9px] md:text-[10px]"><i data-lucide="check-circle" class="text-lime-500 w-3 h-3"></i> 2 Agentes IA (OpenAI API)</li>
+                                            <li class="flex items-center gap-2 text-zinc-300 font-bold uppercase italic text-[9px] md:text-[10px]"><i data-lucide="check-circle" class="text-lime-500 w-3 h-3"></i> 30 Videos Tutoriales</li>
+                                        </ul>
+                                    </div>
+                                    <div class="space-y-4">
+                                        <h5 class="text-[8px] md:text-[9px] font-black uppercase text-zinc-500 border-b border-zinc-800 pb-2 italic tracking-widest text-left md:text-right">Plan de Pagos</h5>
+                                        <div class="space-y-2">
+                                            <div class="bg-zinc-950/80 p-2 md:p-3 rounded-xl border border-zinc-800/50 flex justify-between items-center"><span class="text-[7px] md:text-[8px] font-bold text-zinc-500 uppercase italic">40% INICIO</span><span id="pay-1" class="italic-bold text-white text-xs md:text-sm">€5.000</span></div>
+                                            <div class="bg-zinc-950/80 p-2 md:p-3 rounded-xl border border-zinc-800/50 flex justify-between items-center"><span class="text-[7px] md:text-[8px] font-bold text-zinc-500 uppercase italic">40% FASE 3</span><span id="pay-2" class="italic-bold text-white text-xs md:text-sm">€5.000</span></div>
+                                            <div class="bg-zinc-950/80 p-2 md:p-3 rounded-xl border border-zinc-800/50 flex justify-between items-center"><span class="text-[7px] md:text-[8px] font-bold text-zinc-500 uppercase italic">20% FINAL</span><span id="pay-3" class="italic-bold text-white text-xs md:text-sm">€2.500</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-lime-500 rounded-3xl p-6 md:p-10 flex flex-col justify-between text-black relative overflow-hidden group shadow-[0_0_50px_rgba(132,204,22,0.2)]">
+                            <div class="relative space-y-8 md:space-y-10">
+                                <span class="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] opacity-60 italic leading-tight">Revenue con 20 clientes</span>
+                                <div class="space-y-1">
+                                    <h4 class="text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter leading-none whitespace-nowrap italic">€5.800</h4>
+                                    <p class="text-[8px] md:text-[9px] font-black opacity-80 uppercase tracking-widest italic">MRR OBJETIVO</p>
+                                </div>
+                                <div class="pt-4 md:pt-8 border-t border-black/10 space-y-3 md:space-y-4">
+                                    <div class="flex justify-between items-center italic-bold text-[10px] md:text-xs uppercase"><span>Revenue Anual</span><span>€69.600</span></div>
+                                    <div class="flex justify-between items-center italic-bold text-[10px] md:text-xs uppercase"><span>Costo IA</span><span>~$400/M</span></div>
+                                </div>
+                            </div>
+                            <button class="w-full bg-black text-white py-4 md:py-5 rounded-2xl italic-bold text-[8px] md:text-[9px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 shadow-2xl mt-6 md:mt-8 hover:bg-zinc-900 transition-all">
+                                Aceptar Propuesta <i data-lucide="zap" class="text-lime-500 w-3 h-3 md:w-4 md:h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 md:mt-12 card-base p-6 md:p-10 flex flex-col md:flex-row items-center gap-8 md:gap-10 bg-zinc-900/40">
+                        <div class="flex-1 space-y-2">
+                            <div class="inline-block px-3 py-1 bg-lime-500/10 border border-lime-500/20 rounded-full text-lime-500 text-[7px] md:text-[8px] font-black uppercase tracking-widest italic">Oferta Early Action</div>
+                            <h4 class="italic-bold text-xl md:text-2xl uppercase tracking-tighter leading-none">GARANTÍA Y BONOS</h4>
+                            <p class="text-zinc-400 italic text-[10px] md:text-xs leading-relaxed max-w-xl">Firma antes de 7 días y obtén un 5% de descuento adicional.</p>
+                        </div>
+                        <div class="bg-zinc-950 p-6 md:p-8 rounded-[2rem] border border-zinc-800 text-center min-w-full md:min-w-[240px] shadow-inner">
+                            <p id="bonus-price" class="italic-bold text-xl md:text-2xl text-white tracking-tighter leading-none">€11.875</p>
+                            <p class="text-[7px] md:text-[8px] font-black text-zinc-600 uppercase tracking-widest mt-1 italic">Con Pronto Pago (-5%)</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FLOATING NAV (Mobile and Fast Switching) -->
+            <div class="fixed bottom-6 right-6 flex gap-3 z-50">
+                <button onclick="navigateSection(-1)" class="w-10 h-10 md:w-14 md:h-14 bg-zinc-800 rounded-full flex items-center justify-center border border-zinc-700 shadow-2xl hover:bg-zinc-700 transition-all">
+                    <i data-lucide="chevron-left" class="w-5 h-5 md:w-6 md:h-6"></i>
+                </button>
+                <button onclick="navigateSection(1)" id="next-btn" class="w-10 h-10 md:w-14 md:h-14 bg-lime-500 text-black rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(132,204,22,0.4)] hover:scale-110 transition-all">
+                    <i data-lucide="chevron-right" class="w-5 h-5 md:w-6 md:h-6"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('menu-overlay');
+            menu.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        const sections = ['vision', 'tecnico', 'onboarding', 'roadmap', 'inversion'];
+        let currentIdx = 0;
+
+        function showSection(id, btn) {
+            currentIdx = sections.indexOf(id);
+            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                if (b.getAttribute('onclick').includes(`'${id}'`)) b.classList.add('active');
+            });
+
+            document.getElementById('header-subtitle').innerText = btn.innerText.trim();
+            document.querySelector('main').scrollTop = 0;
+            lucide.createIcons();
+        }
+
+        function navigateSection(dir) {
+            currentIdx = (currentIdx + dir + sections.length) % sections.length;
+            const targetId = sections[currentIdx];
+            const targetBtn = document.querySelector(`.nav-btn[onclick*="'${targetId}'"]`);
+            showSection(targetId, targetBtn);
+        }
+
+        function showPhase(idx, btn) {
+            const detailContainer = document.getElementById('phase-details-container');
+            const data = [
+                { title: "SEMANAS 1-2: SETUP", items: ["Configuración GHL Agencia", "Custom Fields y Etiquetas GYM", "Pipelines de Ventas y Gestión"], time: "25-35h" },
+                { title: "SEMANAS 3-5: IA CORE", items: ["Entrenamiento Agente Outbound", "Integración Webhooks n8n", "Pruebas de latencia < 2 min"], time: "85-110h" },
+                { title: "SEMANAS 6-7: ONBOARDING", items: ["Grabación de 30 Tutoriales", "Setup Base de Conocimiento", "Forms y Calendarios"], time: "70-90h" },
+                { title: "SEMANAS 8-10: PILOTO MVP", items: ["Implementación en Cliente Piloto", "Lanzamiento Oficial MVP"], time: "75-82h" },
+                { title: "+ SEMANAS 11-12: LEADS", items: ["Arquitectura de Distribución", "Workflow de Venta Automatizada"], time: "40-60h" }
+            ];
+
+            const phase = data[idx];
+            detailContainer.innerHTML = `
+                <i data-lucide="clock" class="absolute -right-10 -top-10 w-64 h-64 opacity-5 text-zinc-500"></i>
+                <div class="phase-detail active space-y-8">
+                    <div class="flex items-center gap-3 text-lime-500">
+                        <i data-lucide="check-circle" class="w-6 h-6"></i>
+                        <span class="text-[10px] font-black uppercase tracking-[0.3em]">Entregables de la fase</span>
+                    </div>
+                    <h3 class="italic-bold text-5xl uppercase tracking-tighter">${phase.title}</h3>
+                    <div class="space-y-4">
+                        ${phase.items.map((item, i) => `
+                            <div class="bg-zinc-950/80 p-5 rounded-2xl border border-zinc-800/50 flex items-center gap-6">
+                                <div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center italic-bold text-lime-500 text-xs border border-zinc-700">${i+1}</div>
+                                <span class="text-sm font-bold uppercase italic text-zinc-300">${item}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="pt-8 border-t border-zinc-800 flex justify-between items-center">
+                        <span class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Esfuerzo Estimado</span>
+                        <span class="bg-lime-500/10 text-lime-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase border border-lime-500/20">${phase.time}</span>
+                    </div>
+                </div>
+            `;
+
+            document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            lucide.createIcons();
+        }
+
+        function updatePrice(isFull) {
+            const btnMvp = document.getElementById('btn-mvp');
+            const btnFull = document.getElementById('btn-full');
+            const mainPrice = document.getElementById('price-main');
+            const timeSpan = document.getElementById('price-time');
+            const p1 = document.getElementById('pay-1');
+            const p2 = document.getElementById('pay-2');
+            const p3 = document.getElementById('pay-3');
+            const bonus = document.getElementById('bonus-price');
+            const list = document.getElementById('deliverables-list');
+
+            if (isFull) {
+                btnFull.classList.add('bg-zinc-100', 'text-black'); btnFull.classList.remove('text-zinc-500');
+                btnMvp.classList.remove('bg-lime-500', 'text-black'); btnMvp.classList.add('text-zinc-500');
+                mainPrice.innerText = '€18.000';
+                timeSpan.innerText = '11-13 SEMANAS';
+                p1.innerText = '€7.200'; p2.innerText = '€7.200'; p3.innerText = '€3.600';
+                bonus.innerText = '€17.100';
+                if (!document.getElementById('li-leads')) {
+                    const li = document.createElement('li');
+                    li.id = 'li-leads';
+                    li.className = 'flex items-center gap-2 text-lime-500 font-black uppercase italic text-[9px] md:text-[10px] animate-pulse';
+                    li.innerHTML = '<i data-lucide="zap" class="w-3 h-3"></i> Bolsa de Leads FULL System';
+                    list.appendChild(li);
+                }
+            } else {
+                btnMvp.classList.add('bg-lime-500', 'text-black'); btnMvp.classList.remove('text-zinc-500');
+                btnFull.classList.remove('bg-zinc-100', 'text-black'); btnFull.classList.add('text-zinc-500');
+                mainPrice.innerText = '€12.500';
+                timeSpan.innerText = '8-10 SEMANAS';
+                p1.innerText = '€5.000'; p2.innerText = '€5.000'; p3.innerText = '€2.500';
+                bonus.innerText = '€11.875';
+                const li = document.getElementById('li-leads'); if (li) li.remove();
+            }
+            lucide.createIcons();
+        }
+
+        document.getElementById('mobile-nav').innerHTML = document.getElementById('desktop-nav').innerHTML;
+        document.querySelectorAll('#mobile-nav .nav-btn').forEach(btn => {
+            const originalClick = btn.getAttribute('onclick');
+            btn.setAttribute('onclick', `${originalClick}; toggleMenu();`);
+        });
+    </script>
+</body>
+</html>
